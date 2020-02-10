@@ -1,3 +1,4 @@
+"""
 from .models import Post
 from django.contrib.auth import get_user_model
 from django.test import TestCase
@@ -11,20 +12,12 @@ class PostTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         # cls.client = APIClient() I had to put it in setUp(self)
-        customer_username = get_user_model().objects.create_user(
-            username='customer_username', email='customer_user@gmail.com', is_staff=False, is_superuser=False,
-        )
-
-        staff_username = get_user_model().objects.create_user(
-            username='staff_username', email='staff_user@gmail.com', is_staff=True, is_superuser=False,
-        )
-
-        superuser_username = get_user_model().objects.create_user(
-            username='superuser_username', email='superuser_user@gmail.com', is_staff=True, is_superuser=True,
+        testusername = get_user_model().objects.create_user(
+            username='testusername', email='testusername@gmail.com',
         )
 
         Post.objects.create(
-            title='Test Post 1', desc='Post 1 desc', author=customer_username,
+            title='Test Post 1', desc='Post 1 desc', author=testusername,
         )
 
     def setUp(self):
@@ -34,15 +27,14 @@ class PostTest(TestCase):
         post = Post.objects.get(id=1)
         self.assertEqual(f'{post.title}', 'Test Post 1')
         self.assertEqual(f'{post.desc}', 'Post 1 desc')
-        self.assertEqual(f'{post.author}', 'customer_username')
+        self.assertEqual(f'{post.author}', 'testuser')
 
     def test_ping_post_list_api(self):
         # self.client = APIClient()
-        posts_list = Post.objects.get()  # how to test a full list. THIS WORK CAUSE WE HAVE ONE RECORD ONLY
+        posts_list = Post.objects.get()  # how to test a full list. THIS WORK CAUSE WEHAVE ONE RECORD ONLY
         response = self.client.get(reverse('posts_list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertContains(response, posts_list)
-"""
 
     def test_ping_post_detail_api(self):
         # self.client = APIClient()
@@ -79,4 +71,5 @@ class PostTest(TestCase):
         response = self.client.delete(reverse('posts_delete', kwargs={'pk': 1}))
         response = self.client.get(reverse('posts_detail', kwargs={'pk': 1}), format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
 """
