@@ -42,17 +42,26 @@ class PostTest(TestCase):
         response = self.client.get(reverse('posts_list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertContains(response, posts_list)
-"""
 
     def test_ping_post_detail_api(self):
         # self.client = APIClient()
         response = self.client.get(reverse('posts_detail', kwargs={'pk': 1}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    #### NEXT
     def test_get_valid_post_detail_api(self):
         # self.client = APIClient()
         response = self.client.get(reverse('posts_detail', kwargs={'pk': 1}))
         self.assertEqual(response.content, b'{"id":1,"title":"Test Post 1","desc":"Post 1 desc","author":1}')
+        """
+        #self.client = APIClient()
+        posts_detail = Post.objects.get(id=1)
+        response = self.client.get(reverse('posts_detail', kwargs={'pk': 1}))
+        self.assertEqual(response.content, posts_detail)
+        """
+"""
+
+    
 
     def test_create_post_api(self):
         # self.client = APIClient()
